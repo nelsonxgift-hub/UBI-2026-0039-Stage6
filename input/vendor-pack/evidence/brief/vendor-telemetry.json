@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.1",
+  "exported_at": "2026-07-13T09:00:00Z",
+  "tls": {
+    "minimum_version_claimed": "1.2",
+    "observations": [
+      { "endpoint": "api.peopleflow.invalid", "port": 443, "protocol": "TLSv1.3", "observed_at": "2026-07-13T08:41:00Z" },
+      { "endpoint": "files.peopleflow.invalid", "port": 443, "protocol": "TLSv1.0", "observed_at": "2026-07-13T08:42:00Z" }
+    ]
+  },
+  "privileged_access": [
+    { "event_id": "PA-001", "actor": "support-44", "region": "us-east-1", "mfa": true, "approved_ticket": "SUP-882", "time": "2026-07-01T10:00:00Z", "previous_hash": "ROOT", "hash": "2d771" },
+    { "event_id": "PA-002", "actor": "support-19", "region": "ap-southeast-1", "mfa": false, "approved_ticket": null, "time": "2026-07-02T10:00:00Z", "previous_hash": "2d771", "hash": "98abc" },
+    { "event_id": "PA-002", "actor": "support-19", "region": "ap-southeast-1", "mfa": false, "approved_ticket": null, "time": "2026-07-02T10:00:00Z", "previous_hash": "2d771", "hash": "98abc" },
+    { "event_id": "PA-003", "actor": "support-44", "region": "us-east-1", "mfa": true, "approved_ticket": "SUP-901", "time": "2026-07-03T10:00:00Z", "previous_hash": "WRONG", "hash": "a10ff" }
+  ],
+  "deletion_jobs": [
+    { "job_id": "DEL-710", "subject_id": "S-188", "status": "success", "reported_at": "2026-06-20T12:00:00Z", "completed_at": "2026-06-20T12:14:00Z", "backup_purge_at": null },
+    { "job_id": "DEL-711", "subject_id": "S-189", "status": "success", "reported_at": "2026-06-21T12:00:00Z", "completed_at": "2026-06-21T11:58:00Z", "backup_purge_at": "2026-07-21T12:00:00Z" }
+  ],
+  "subprocessors": [
+    { "id": "SP-01", "name": "QueueNorth", "region": "us-east-1", "data_classes": ["employee_id", "email"], "parent": "PeopleFlow" },
+    { "id": "SP-02", "name": "AssistWorks", "region": "Philippines", "data_classes": ["support_case", "employee_id"], "parent": "PeopleFlow" },
+    { "id": "SP-03", "name": "ArchiveLane", "region": "eu-west-1", "data_classes": ["backup"], "parent": "QueueNorth" }
+  ]
+}
