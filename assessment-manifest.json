@@ -9,7 +9,7 @@
     "manifest_signature": "2d841fc7e48dad9b10258f6a94916dd04e40310d6e0e7c0a1f0a71d1492c0c71",
     "verified_before_use": true
   },
-  "commit": "3abf41315b3ad2c41229ed4e3375d78433cb5bc4",
+  "commit": "2a2b16195582e47142fda6803efa05bd23d157a4",
   "supported_environment": {
     "os": "Parrot OS 6.4 MATE Security Edition (VirtualBox VM on Windows host)",
     "cpu": "VirtualBox-assigned virtual CPU",
