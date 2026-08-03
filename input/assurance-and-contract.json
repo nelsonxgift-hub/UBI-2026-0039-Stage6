@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "assurance_report": {
+    "type": "SOC 2 Type II",
+    "period_start": "2024-01-01",
+    "period_end": "2024-12-31",
+    "issued_at": "2025-02-28",
+    "scope_regions": ["us-east-1"],
+    "subservice_method": "carve-out",
+    "exceptions": [
+      { "id": "EX-CC6.2", "population": 25, "failures": 4, "condition": "terminated_accounts_enabled", "range_days": [6, 19] },
+      { "id": "EX-CC7.2", "population": 40, "failures": 7, "condition": "alert_review_evidence_absent" },
+      { "id": "EX-CC8.1", "population": 20, "failures": 3, "condition": "emergency_change_approval_late", "required_business_days": 5 }
+    ]
+  },
+  "contract": {
+    "hosting_country": "United States",
+    "subprocessor_change_notice_days": 10,
+    "termination_deletion_days": 180,
+    "backup_additional_deletion_days": 90,
+    "incident_notice": { "basis": "vendor_confirmation", "maximum_hours": 72 },
+    "audit_assistance": { "included_questionnaires_per_year": 1, "additional_assistance": "billable" }
+  },
+  "subprocessors": [
+    { "id": "AWS", "location": "United States", "function": "hosting", "data_classes": ["all_platform_data"], "assurance": "SOC 2 Type II" },
+    { "id": "HELP-SPHERE", "location": "Philippines", "function": "tier_1_support", "data_classes": ["ticket", "attachment"], "assurance": "self-assessment", "sessions_recorded": false },
+    { "id": "MAIL-RELAY", "location": "Netherlands", "function": "transactional_email", "data_classes": ["employee_id", "email"], "assurance": "ISO 27001", "assurance_expires": "2026-09-30" }
+  ]
+}

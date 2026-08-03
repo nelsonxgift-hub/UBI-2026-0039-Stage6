@@ -1,0 +1,355 @@
+{
+  "pipeline_version": "1.0",
+  "source_hashes": {
+    "input/vendor-claims.json": "21feb862f2fd831d893144386cb6ad12fe7ca9c63832cf4707461b8eadf0d670",
+    "input/vendor-telemetry.json": "6d744d4d5a2e3b4e2385176c6d105c8593dbbf8f2451601f86d2a54e79c947d6",
+    "input/assurance-and-contract.json": "3407ed2a89bbc18e3671f4c53950befd8db913c9ba02ab2ddcc244da0155474a"
+  },
+  "verdicts": [
+    {
+      "check_id": "claim.evidence_presence",
+      "claim_id": "IAM-04",
+      "status": "insufficient",
+      "code": "EVIDENCE_NOT_SUPPLIED",
+      "artifact": "input/vendor-claims.json",
+      "locator": "$.claims[?(@.claim_id=='IAM-04')].evidence_supplied",
+      "message": "IAM-04 evidence_supplied=false and no termination-event export exists in telemetry to test against."
+    },
+    {
+      "check_id": "claim.contradicted_by_exception",
+      "claim_id": "LOG-07",
+      "status": "fail",
+      "code": "AUDIT_EXCEPTION_CONTRADICTS_CLAIM",
+      "artifact": "input/assurance-and-contract.json",
+      "locator": "$.assurance_report.exceptions[?(@.id=='EX-CC7.2')]",
+      "message": "SOC 2 exception EX-CC7.2: alert-review evidence absent for 7 of 40 sampled days, contradicting the LOG-07 claim of daily review with retained evidence."
+    },
+    {
+      "check_id": "tls.minimum",
+      "claim_id": "ENC-03",
+      "status": "pass",
+      "code": "TLS_OK",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.tls.observations[0] (endpoint=api.peopleflow.invalid)",
+      "message": "api.peopleflow.invalid observed at TLSv1.3; vendor-claimed minimum is TLSv1.2."
+    },
+    {
+      "check_id": "tls.minimum",
+      "claim_id": "ENC-03",
+      "status": "fail",
+      "code": "TLS_BELOW_MINIMUM",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.tls.observations[1] (endpoint=files.peopleflow.invalid)",
+      "message": "files.peopleflow.invalid observed at TLSv1.0; vendor-claimed minimum is TLSv1.2."
+    },
+    {
+      "check_id": "deletion.order",
+      "claim_id": "DEL-05",
+      "status": "fail",
+      "code": "SUCCESS_BEFORE_COMPLETION",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.deletion_jobs[0] (job_id=DEL-710)",
+      "message": "DEL-710: status reported at 2026-06-20T12:00:00Z, completion event at 2026-06-20T12:14:00Z."
+    },
+    {
+      "check_id": "deletion.backup",
+      "claim_id": "DEL-05",
+      "status": "insufficient",
+      "code": "BACKUP_PURGE_UNPROVEN",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.deletion_jobs[0].backup_purge_at (job_id=DEL-710)",
+      "message": "DEL-710: status=success, backup_purge_at=None."
+    },
+    {
+      "check_id": "deletion.order",
+      "claim_id": "DEL-05",
+      "status": "pass",
+      "code": "DELETION_ORDER_OK",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.deletion_jobs[1] (job_id=DEL-711)",
+      "message": "DEL-711: status reported at 2026-06-21T12:00:00Z, completion event at 2026-06-21T11:58:00Z."
+    },
+    {
+      "check_id": "deletion.backup",
+      "claim_id": "DEL-05",
+      "status": "pass",
+      "code": "BACKUP_PURGE_OK",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.deletion_jobs[1].backup_purge_at (job_id=DEL-711)",
+      "message": "DEL-711: status=success, backup_purge_at=2026-07-21T12:00:00Z."
+    },
+    {
+      "check_id": "location.claim",
+      "claim_id": "LOC-02",
+      "status": "pass",
+      "code": "REGION_CLAIM_OK",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.subprocessors[0] (id=SP-01, name=QueueNorth)",
+      "message": "QueueNorth (SP-01) processes ['employee_id', 'email'] in us-east-1; LOC-02 claims data remains exclusively in us-east-1."
+    },
+    {
+      "check_id": "location.claim",
+      "claim_id": "LOC-02",
+      "status": "fail",
+      "code": "REGION_CLAIM_CONTRADICTED",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.subprocessors[1] (id=SP-02, name=AssistWorks)",
+      "message": "AssistWorks (SP-02) processes ['support_case', 'employee_id'] in Philippines; LOC-02 claims data remains exclusively in us-east-1."
+    },
+    {
+      "check_id": "location.claim",
+      "claim_id": "LOC-02",
+      "status": "fail",
+      "code": "REGION_CLAIM_CONTRADICTED",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.subprocessors[2] (id=SP-03, name=ArchiveLane)",
+      "message": "ArchiveLane (SP-03) processes ['backup'] in eu-west-1; LOC-02 claims data remains exclusively in us-east-1."
+    },
+    {
+      "check_id": "access.duplicate",
+      "claim_id": null,
+      "status": "malformed",
+      "code": "DUPLICATE_EVENT_ID",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.privileged_access[*].event_id",
+      "message": "event_id list has 4 entries and 3 distinct values."
+    },
+    {
+      "check_id": "access.mfa",
+      "claim_id": null,
+      "status": "pass",
+      "code": "MFA_OK",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.privileged_access[event_id=PA-001].mfa",
+      "message": "PA-001 (support-44, us-east-1): mfa=True, approved_ticket=SUP-882."
+    },
+    {
+      "check_id": "access.mfa",
+      "claim_id": null,
+      "status": "fail",
+      "code": "PRIVILEGED_MFA_MISSING",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.privileged_access[event_id=PA-002].mfa",
+      "message": "PA-002 (support-19, ap-southeast-1): mfa=False, approved_ticket=None."
+    },
+    {
+      "check_id": "access.mfa",
+      "claim_id": null,
+      "status": "pass",
+      "code": "MFA_OK",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.privileged_access[event_id=PA-003].mfa",
+      "message": "PA-003 (support-44, us-east-1): mfa=True, approved_ticket=SUP-901."
+    },
+    {
+      "check_id": "access.hash_chain",
+      "claim_id": null,
+      "status": "pass",
+      "code": "HASH_CHAIN_OK",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.privileged_access[event_id=PA-002].previous_hash vs $.privileged_access[event_id=PA-001].hash",
+      "message": "PA-002.previous_hash correctly chains from PA-001.hash."
+    },
+    {
+      "check_id": "access.hash_chain",
+      "claim_id": null,
+      "status": "fail",
+      "code": "HASH_CHAIN_BROKEN",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.privileged_access[event_id=PA-003].previous_hash vs $.privileged_access[event_id=PA-002].hash",
+      "message": "PA-003.previous_hash=WRONG does not chain from PA-002.hash=98abc."
+    },
+    {
+      "check_id": "notification.clock",
+      "claim_id": "IR-08",
+      "status": "fail",
+      "code": "CUSTOMER_CLOCK_DELAYED",
+      "artifact": "input/assurance-and-contract.json",
+      "locator": "$.contract.incident_notice.basis",
+      "message": "Notice clock basis is 'vendor_confirmation': the 72-hour window starts only when PeopleFlow itself confirms an incident, so the customer has no independent trigger."
+    },
+    {
+      "check_id": "subprocessor.assurance",
+      "claim_id": null,
+      "status": "pass",
+      "code": "ASSURANCE_OK",
+      "artifact": "input/assurance-and-contract.json",
+      "locator": "$.subprocessors[0] (id=AWS)",
+      "message": "AWS (hosting, United States): assurance=SOC 2 Type II."
+    },
+    {
+      "check_id": "subprocessor.assurance",
+      "claim_id": null,
+      "status": "insufficient",
+      "code": "ASSURANCE_MISSING",
+      "artifact": "input/assurance-and-contract.json",
+      "locator": "$.subprocessors[1] (id=HELP-SPHERE)",
+      "message": "HELP-SPHERE (tier_1_support, Philippines): assurance=self-assessment."
+    },
+    {
+      "check_id": "subprocessor.assurance",
+      "claim_id": null,
+      "status": "pass",
+      "code": "ASSURANCE_OK",
+      "artifact": "input/assurance-and-contract.json",
+      "locator": "$.subprocessors[2] (id=MAIL-RELAY)",
+      "message": "MAIL-RELAY (transactional_email, Netherlands): assurance=ISO 27001."
+    },
+    {
+      "check_id": "subprocessor.disclosed",
+      "claim_id": "LOC-02",
+      "status": "fail",
+      "code": "UNDISCLOSED_SUBPROCESSOR",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.subprocessors[0] (id=SP-01, name=QueueNorth)",
+      "message": "Telemetry shows subprocessor QueueNorth (SP-01) handling ['employee_id', 'email'] in us-east-1; this name/id does not appear in the DPA-disclosed subprocessor list (['AWS', 'HELP-SPHERE', 'MAIL-RELAY'])."
+    },
+    {
+      "check_id": "subprocessor.disclosed",
+      "claim_id": "LOC-02",
+      "status": "fail",
+      "code": "UNDISCLOSED_SUBPROCESSOR",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.subprocessors[1] (id=SP-02, name=AssistWorks)",
+      "message": "Telemetry shows subprocessor AssistWorks (SP-02) handling ['support_case', 'employee_id'] in Philippines; this name/id does not appear in the DPA-disclosed subprocessor list (['AWS', 'HELP-SPHERE', 'MAIL-RELAY'])."
+    },
+    {
+      "check_id": "subprocessor.disclosed",
+      "claim_id": "LOC-02",
+      "status": "fail",
+      "code": "UNDISCLOSED_SUBPROCESSOR",
+      "artifact": "input/vendor-telemetry.json",
+      "locator": "$.subprocessors[2] (id=SP-03, name=ArchiveLane)",
+      "message": "Telemetry shows subprocessor ArchiveLane (SP-03) handling ['backup'] in eu-west-1; this name/id does not appear in the DPA-disclosed subprocessor list (['AWS', 'HELP-SPHERE', 'MAIL-RELAY'])."
+    }
+  ],
+  "graph_findings": [],
+  "decision": {
+    "decision": "conditional_approve",
+    "decision_rationale": "Every SIG claim except (partially) ENC-03 and LOC-02's non-conflicting edge has a verified technical or evidentiary problem, including an undisclosed-subprocessor finding that touches regulated PII outside the claimed region. Outright rejection is not required because every finding maps to a closeable, owned, fail-closed condition; but approval is conditional and processing must be suspended for any in-scope data class until Tier-0 conditions (COND-01, COND-02, COND-06, COND-07) close. This is not a prose-only conditional approval: every condition above has an executable monitor (see monitoring-plan.yaml) and a stated fail-closed action.",
+    "requires_ceo_approval": true,
+    "ceo_approval_reason": "Contract value USD 180,000 exceeds the USD 85,000 risk-acceptance threshold in the controlling assignment overlay; any residual-risk acceptance requires CEO sign-off.",
+    "counts": {
+      "fail": 11,
+      "insufficient": 3,
+      "malformed": 1,
+      "pass": 9
+    },
+    "claims_with_problem": [
+      "DEL-05",
+      "ENC-03",
+      "IAM-04",
+      "IR-08",
+      "LOC-02",
+      "LOG-07"
+    ],
+    "conditions": [
+      {
+        "condition_id": "COND-01",
+        "description": "PeopleFlow discloses QueueNorth, AssistWorks, ArchiveLane on the contractual subprocessor list (or ceases routing CloudScale Dynamics data through them) and confirms no other undisclosed subprocessors exist.",
+        "owner": "PeopleFlow Vendor Manager / CloudScale Chief People Officer",
+        "due_in_days": 10,
+        "evidence_of_closure": "Updated, countersigned subprocessor list matching telemetry-observed processors; written confirmation of completeness.",
+        "fail_closed_action": "Suspend data transmission to any subprocessor not on the disclosed list.",
+        "evidence_source_codes": [
+          "UNDISCLOSED_SUBPROCESSOR"
+        ]
+      },
+      {
+        "condition_id": "COND-02",
+        "description": "PeopleFlow provides a corrected data-residency statement reflecting actual processing regions (Philippines, eu-west-1), or relocates processing to match the us-east-1-exclusive claim.",
+        "owner": "PeopleFlow Compliance Lead",
+        "due_in_days": 15,
+        "evidence_of_closure": "Signed data-flow map matching telemetry; or telemetry re-export showing all regions collapsed to us-east-1.",
+        "fail_closed_action": "Treat LOC-02 as false for contractual purposes; apply cross-border transfer terms to all affected data classes until corrected.",
+        "evidence_source_codes": [
+          "REGION_CLAIM_CONTRADICTED"
+        ]
+      },
+      {
+        "condition_id": "COND-03",
+        "description": "HelpSphere (tier-1 support, ticket/attachment access) provides an independent assurance report (SOC 2, ISO 27001, or equivalent) and enables session recording for privileged support access to attachments.",
+        "owner": "PeopleFlow Vendor Manager",
+        "due_in_days": 30,
+        "evidence_of_closure": "Independent assurance report + configuration export showing session recording enabled.",
+        "fail_closed_action": "Restrict HelpSphere from attachment access until assurance is provided.",
+        "evidence_source_codes": [
+          "ASSURANCE_MISSING"
+        ]
+      },
+      {
+        "condition_id": "COND-04",
+        "description": "PeopleFlow enforces MFA on all privileged support access; retroactively investigates the PA-002 non-MFA session(s) for unauthorized activity.",
+        "owner": "PeopleFlow Security Lead",
+        "due_in_days": 7,
+        "evidence_of_closure": "MFA enforcement policy export + investigation summary for PA-002.",
+        "fail_closed_action": "Suspend the affected actor's privileged access pending investigation.",
+        "evidence_source_codes": [
+          "PRIVILEGED_MFA_MISSING"
+        ]
+      },
+      {
+        "condition_id": "COND-05",
+        "description": "PeopleFlow explains and remediates the broken privileged-access hash chain (integrity of the audit log itself), and re-exports a verifiably unbroken log for the affected period.",
+        "owner": "PeopleFlow Security Lead",
+        "due_in_days": 14,
+        "evidence_of_closure": "Re-exported, independently hash-verified access log covering the gap period.",
+        "fail_closed_action": "Treat the access log as unverifiable for the affected period; do not rely on it for LOG-07 evidence until remediated.",
+        "evidence_source_codes": [
+          "HASH_CHAIN_BROKEN"
+        ]
+      },
+      {
+        "condition_id": "COND-06",
+        "description": "PeopleFlow corrects deletion-job status reporting to fire only after the completion event, and supplies backup-purge evidence (timestamp + verification) for every deletion job, including DEL-710.",
+        "owner": "PeopleFlow Data Protection Officer",
+        "due_in_days": 30,
+        "evidence_of_closure": "Corrected deletion pipeline export; backup_purge_at populated and verifiable for all sampled jobs.",
+        "fail_closed_action": "Treat DEL-05 as unproven; escalate to legal if termination deletion is contractually represented as complete before evidence exists.",
+        "evidence_source_codes": [
+          "SUCCESS_BEFORE_COMPLETION",
+          "BACKUP_PURGE_UNPROVEN"
+        ]
+      },
+      {
+        "condition_id": "COND-07",
+        "description": "DPA is amended so the 72-hour notice clock starts at vendor discovery/should-have-discovered, not solely at vendor confirmation, and PeopleFlow commits to an interim notice within 24h of any suspected incident.",
+        "owner": "CloudScale Legal / PeopleFlow Legal",
+        "due_in_days": 30,
+        "evidence_of_closure": "Countersigned DPA amendment.",
+        "fail_closed_action": "Escalate any suspected incident internally at CloudScale on independent detection, without waiting on PeopleFlow confirmation.",
+        "evidence_source_codes": [
+          "CUSTOMER_CLOCK_DELAYED"
+        ]
+      },
+      {
+        "condition_id": "COND-08",
+        "description": "PeopleFlow remediates the EX-CC7.2 alert-review gap (7 of 40 days missing evidence) and demonstrates a full review cycle with retained evidence for one subsequent audit period.",
+        "owner": "PeopleFlow Security Lead",
+        "due_in_days": 60,
+        "evidence_of_closure": "Bridge letter or interim testing evidence for the remediation period.",
+        "fail_closed_action": "Do not rely on LOG-07 as met until remediation evidence exists.",
+        "evidence_source_codes": [
+          "AUDIT_EXCEPTION_CONTRADICTS_CLAIM"
+        ]
+      },
+      {
+        "condition_id": "COND-09",
+        "description": "PeopleFlow supplies a termination-access export (IAM-04) so the 24-hour de-provisioning claim can be tested against evidence rather than accepted on questionnaire text alone.",
+        "owner": "PeopleFlow Vendor Manager",
+        "due_in_days": 15,
+        "evidence_of_closure": "Termination-access log export covering at least one full quarter.",
+        "fail_closed_action": "Treat IAM-04 as unverified; do not represent it as tested in any downstream audit.",
+        "evidence_source_codes": [
+          "EVIDENCE_NOT_SUPPLIED"
+        ]
+      }
+    ],
+    "residual_risks": [
+      "Even after all conditions close, PeopleFlow remains a single vendor with access to regulated PII (bank details, tax IDs) and no customer-side ability to independently detect an incident before PeopleFlow chooses to confirm one.",
+      "Historical processing that already occurred in undisclosed regions/subprocessors cannot be un-processed; conditions govern going-forward state only.",
+      "SOC 2 Type II carve-out method means subservice organisations' controls are not directly tested by PeopleFlow's own auditor."
+    ],
+    "graph_findings": []
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "fixtures": [
+    {
+      "case_id": "P-VENDOR-01",
+      "check_id": "tls.minimum",
+      "expected_code": "TLS_BELOW_MINIMUM",
+      "expected_status": "fail",
+      "input": {
+        "minimum": "TLSv1.2",
+        "observed": "TLSv1.0"
+      },
+      "record_id": "record-d8e644"
+    },
+    {
+      "case_id": "P-VENDOR-02",
+      "check_id": "access.mfa",
+      "expected_code": "PRIVILEGED_MFA_MISSING",
+      "expected_status": "fail",
+      "input": {
+        "mfa": false,
+        "privileged": true
+      },
+      "record_id": "record-badf8f"
+    },
+    {
+      "case_id": "P-VENDOR-03",
+      "check_id": "access.hash_chain",
+      "expected_code": "HASH_CHAIN_BROKEN",
+      "expected_status": "fail",
+      "input": {
+        "expected_previous_hash": "abc123",
+        "previous_hash": "WRONG"
+      },
+      "record_id": "record-d58777"
+    },
+    {
+      "case_id": "P-VENDOR-04",
+      "check_id": "access.duplicate",
+      "expected_code": "DUPLICATE_EVENT_ID",
+      "expected_status": "malformed",
+      "input": {
+        "event_ids": [
+          "PA-2",
+          "PA-2"
+        ]
+      },
+      "record_id": "record-8ca84f"
+    },
+    {
+      "case_id": "P-VENDOR-05",
+      "check_id": "deletion.order",
+      "expected_code": "SUCCESS_BEFORE_COMPLETION",
+      "expected_status": "fail",
+      "input": {
+        "completed_at": "2026-07-13T12:05:00Z",
+        "reported_at": "2026-07-13T12:00:00Z"
+      },
+      "record_id": "record-17f522"
+    },
+    {
+      "case_id": "P-VENDOR-06",
+      "check_id": "deletion.backup",
+      "expected_code": "BACKUP_PURGE_UNPROVEN",
+      "expected_status": "insufficient",
+      "input": {
+        "backup_purge_at": null,
+        "status": "success"
+      },
+      "record_id": "record-b50c7d"
+    },
+    {
+      "case_id": "P-VENDOR-07",
+      "check_id": "location.claim",
+      "expected_code": "REGION_CLAIM_CONTRADICTED",
+      "expected_status": "fail",
+      "input": {
+        "claimed": "us-east-1",
+        "observed": "Philippines"
+      },
+      "record_id": "record-50c961"
+    },
+    {
+      "case_id": "P-VENDOR-08",
+      "check_id": "subprocessor.assurance",
+      "expected_code": "ASSURANCE_MISSING",
+      "expected_status": "insufficient",
+      "input": {
+        "assurance": null,
+        "subprocessor": "HelpSphere"
+      },
+      "record_id": "record-140572"
+    },
+    {
+      "case_id": "P-VENDOR-09",
+      "check_id": "notification.clock",
+      "expected_code": "CUSTOMER_CLOCK_DELAYED",
+      "expected_status": "fail",
+      "input": {
+        "clock_basis": "vendor_confirmation",
+        "customer_awareness_dependency": true
+      },
+      "record_id": "record-b01c7c"
+    },
+    {
+      "case_id": "P-VENDOR-10",
+      "check_id": "graph.orphan",
+      "expected_code": "ORPHAN_NODE",
+      "expected_status": "malformed",
+      "input": {
+        "node": "SP-9",
+        "parent": "MISSING"
+      },
+      "record_id": "record-e81b82"
+    },
+    {
+      "case_id": "P-VENDOR-11",
+      "check_id": "tls.minimum",
+      "expected_code": "TLS_BELOW_MINIMUM",
+      "expected_status": "fail",
+      "input": {
+        "minimum": "TLSv1.2",
+        "observed": "TLSv1.0"
+      },
+      "record_id": "record-6e4377"
+    },
+    {
+      "case_id": "P-VENDOR-12",
+      "check_id": "access.mfa",
+      "expected_code": "PRIVILEGED_MFA_MISSING",
+      "expected_status": "fail",
+      "input": {
+        "mfa": false,
+        "privileged": true
+      },
+      "record_id": "record-d81145"
+    },
+    {
+      "case_id": "P-VENDOR-13",
+      "check_id": "access.hash_chain",
+      "expected_code": "HASH_CHAIN_BROKEN",
+      "expected_status": "fail",
+      "input": {
+        "expected_previous_hash": "abc123",
+        "previous_hash": "WRONG"
+      },
+      "record_id": "record-57c89e"
+    },
+    {
+      "case_id": "P-VENDOR-14",
+      "check_id": "access.duplicate",
+      "expected_code": "DUPLICATE_EVENT_ID",
+      "expected_status": "malformed",
+      "input": {
+        "event_ids": [
+          "PA-2",
+          "PA-2"
+        ]
+      },
+      "record_id": "record-14891a"
+    },
+    {
+      "case_id": "P-VENDOR-15",
+      "check_id": "deletion.order",
+      "expected_code": "SUCCESS_BEFORE_COMPLETION",
+      "expected_status": "fail",
+      "input": {
+        "completed_at": "2026-07-13T12:05:00Z",
+        "reported_at": "2026-07-13T12:00:00Z"
+      },
+      "record_id": "record-e63562"
+    },
+    {
+      "case_id": "P-VENDOR-16",
+      "check_id": "deletion.backup",
+      "expected_code": "BACKUP_PURGE_UNPROVEN",
+      "expected_status": "insufficient",
+      "input": {
+        "backup_purge_at": null,
+        "status": "success"
+      },
+      "record_id": "record-52fe1a"
+    },
+    {
+      "case_id": "P-VENDOR-17",
+      "check_id": "location.claim",
+      "expected_code": "REGION_CLAIM_CONTRADICTED",
+      "expected_status": "fail",
+      "input": {
+        "claimed": "us-east-1",
+        "observed": "Philippines"
+      },
+      "record_id": "record-b02ba2"
+    },
+    {
+      "case_id": "P-VENDOR-18",
+      "check_id": "subprocessor.assurance",
+      "expected_code": "ASSURANCE_MISSING",
+      "expected_status": "insufficient",
+      "input": {
+        "assurance": null,
+        "subprocessor": "HelpSphere"
+      },
+      "record_id": "record-6e3183"
+    },
+    {
+      "case_id": "P-VENDOR-19",
+      "check_id": "notification.clock",
+      "expected_code": "CUSTOMER_CLOCK_DELAYED",
+      "expected_status": "fail",
+      "input": {
+        "clock_basis": "vendor_confirmation",
+        "customer_awareness_dependency": true
+      },
+      "record_id": "record-e344b1"
+    },
+    {
+      "case_id": "P-VENDOR-20",
+      "check_id": "graph.orphan",
+      "expected_code": "ORPHAN_NODE",
+      "expected_status": "malformed",
+      "input": {
+        "node": "SP-9",
+        "parent": "MISSING"
+      },
+      "record_id": "record-e4dc06"
+    }
+  ],
+  "interface_version": "2026-07",
+  "project": "GRC-A2",
+  "schema_version": "1.0"
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "vendor": "PeopleFlow Inc.",
+  "signed_at": "2026-07-02T00:00:00Z",
+  "claims": [
+    { "claim_id": "IAM-04", "control": "termination_access", "operator": "lte_hours", "value": 24, "evidence_supplied": false },
+    { "claim_id": "LOG-07", "control": "alert_review", "operator": "daily_with_retention_days", "value": 365, "evidence_supplied": false },
+    { "claim_id": "LOC-02", "control": "data_region", "operator": "exclusive_region", "value": "us-east-1", "evidence_supplied": true },
+    { "claim_id": "ENC-03", "control": "encryption", "operator": "transit_and_rest", "value": "provider-managed", "evidence_supplied": true },
+    { "claim_id": "DEL-05", "control": "termination_deletion", "operator": "prompt", "value": true, "evidence_supplied": false },
+    { "claim_id": "IR-08", "control": "customer_notification", "operator": "lte_hours_after_vendor_confirmation", "value": 72, "evidence_supplied": false }
+  ]
+}

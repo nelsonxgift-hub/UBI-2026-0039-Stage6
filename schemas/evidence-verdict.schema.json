@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "grc-a2/evidence-verdict.schema.json",
+  "title": "Single verdict emitted by a check",
+  "type": "object",
+  "required": ["check_id", "claim_id", "status", "code", "artifact", "locator", "message"],
+  "properties": {
+    "check_id": { "type": "string" },
+    "claim_id": { "type": ["string", "null"] },
+    "status": { "type": "string", "enum": ["pass", "fail", "insufficient", "malformed"] },
+    "code": { "type": "string" },
+    "artifact": { "type": "string" },
+    "locator": { "type": "string" },
+    "message": { "type": "string" }
+  },
+  "additionalProperties": false
+}

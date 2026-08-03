@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "grc-a2/assurance-contract.schema.json",
+  "title": "SOC 2 assurance report and DPA/contract export",
+  "type": "object",
+  "required": ["schema_version", "assurance_report", "contract", "subprocessors"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "assurance_report": {
+      "type": "object",
+      "required": ["type", "period_start", "period_end", "issued_at", "scope_regions", "subservice_method", "exceptions"],
+      "properties": {
+        "type": { "type": "string" },
+        "period_start": { "type": "string", "format": "date" },
+        "period_end": { "type": "string", "format": "date" },
+        "issued_at": { "type": "string", "format": "date" },
+        "scope_regions": { "type": "array", "items": { "type": "string" } },
+        "subservice_method": { "type": "string", "enum": ["carve-out", "inclusive"] },
+        "exceptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "population", "failures", "condition"],
+            "properties": {
+              "id": { "type": "string" },
+              "population": { "type": "integer" },
+              "failures": { "type": "integer" },
+              "condition": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "required": ["hosting_country", "subprocessor_change_notice_days", "termination_deletion_days", "incident_notice"],
+      "properties": {
+        "hosting_country": { "type": "string" },
+        "subprocessor_change_notice_days": { "type": "integer" },
+        "termination_deletion_days": { "type": "integer" },
+        "backup_additional_deletion_days": { "type": "integer" },
+        "incident_notice": {
+          "type": "object",
+          "required": ["basis", "maximum_hours"],
+          "properties": {
+            "basis": { "type": "string" },
+            "maximum_hours": { "type": "integer" }
+          }
+        },
+        "audit_assistance": { "type": "object" }
+      }
+    },
+    "subprocessors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "location", "function", "data_classes", "assurance"],
+        "properties": {
+          "id": { "type": "string" },
+          "location": { "type": "string" },
+          "function": { "type": "string" },
+          "data_classes": { "type": "array", "items": { "type": "string" } },
+          "assurance": { "type": ["string", "null"] },
+          "assurance_expires": { "type": "string", "format": "date" },
+          "sessions_recorded": { "type": "boolean" }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "grc-a2/sig-claims.schema.json",
+  "title": "Vendor SIG claim export",
+  "type": "object",
+  "required": ["schema_version", "vendor", "signed_at", "claims"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "vendor": { "type": "string", "minLength": 1 },
+    "signed_at": { "type": "string", "format": "date-time" },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "control", "operator", "value", "evidence_supplied"],
+        "properties": {
+          "claim_id": { "type": "string", "pattern": "^[A-Z]+-[0-9]+$" },
+          "control": { "type": "string" },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "lte_hours",
+              "daily_with_retention_days",
+              "exclusive_region",
+              "transit_and_rest",
+              "prompt",
+              "lte_hours_after_vendor_confirmation"
+            ]
+          },
+          "value": {},
+          "evidence_supplied": { "type": "boolean" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

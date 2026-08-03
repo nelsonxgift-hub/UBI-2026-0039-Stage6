@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "grc-a2/telemetry.schema.json",
+  "title": "Vendor machine-readable telemetry export",
+  "type": "object",
+  "required": ["schema_version", "exported_at", "tls", "privileged_access", "deletion_jobs", "subprocessors"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "exported_at": { "type": "string", "format": "date-time" },
+    "tls": {
+      "type": "object",
+      "required": ["minimum_version_claimed", "observations"],
+      "properties": {
+        "minimum_version_claimed": { "type": "string" },
+        "observations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["endpoint", "port", "protocol", "observed_at"],
+            "properties": {
+              "endpoint": { "type": "string" },
+              "port": { "type": "integer" },
+              "protocol": { "type": "string", "pattern": "^TLSv1\\.[0-3]$" },
+              "observed_at": { "type": "string", "format": "date-time" }
+            }
+          }
+        }
+      }
+    },
+    "privileged_access": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["event_id", "actor", "region", "mfa", "time", "previous_hash", "hash"],
+        "properties": {
+          "event_id": { "type": "string" },
+          "actor": { "type": "string" },
+          "region": { "type": "string" },
+          "mfa": { "type": "boolean" },
+          "approved_ticket": { "type": ["string", "null"] },
+          "time": { "type": "string", "format": "date-time" },
+          "previous_hash": { "type": "string" },
+          "hash": { "type": "string" }
+        }
+      }
+    },
+    "deletion_jobs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["job_id", "subject_id", "status", "reported_at", "completed_at"],
+        "properties": {
+          "job_id": { "type": "string" },
+          "subject_id": { "type": "string" },
+          "status": { "type": "string", "enum": ["success", "failed", "pending"] },
+          "reported_at": { "type": "string", "format": "date-time" },
+          "completed_at": { "type": ["string", "null"], "format": "date-time" },
+          "backup_purge_at": { "type": ["string", "null"], "format": "date-time" }
+        }
+      }
+    },
+    "subprocessors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "region", "data_classes", "parent"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "region": { "type": "string" },
+          "data_classes": { "type": "array", "items": { "type": "string" } },
+          "parent": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

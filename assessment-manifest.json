@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "project_id": "GRC-A2",
+  "variant": "V5/D5",
+  "candidate_binding": "UBI-2026-0039",
+  "assigned_pack": {
+    "file_name": "grc-stage-6-shared-b1.tar.gz",
+    "sha256": "3e5e6e8f39975da3e07d1b72a54181910e97db74c0d09b43c8553381e6866973",
+    "manifest_signature": "2d841fc7e48dad9b10258f6a94916dd04e40310d6e0e7c0a1f0a71d1492c0c71",
+    "verified_before_use": true
+  },
+  "commit": "3abf41315b3ad2c41229ed4e3375d78433cb5bc4",
+  "supported_environment": {
+    "os": "Parrot OS 6.4 MATE Security Edition (VirtualBox VM on Windows host)",
+    "cpu": "VirtualBox-assigned virtual CPU",
+    "memory_gb": 8,
+    "tool_versions": {
+      "python": "3.12",
+      "jsonschema": "4.26.0",
+      "pytest": "9.1.1",
+      "pyyaml": "6.x",
+      "reportlab": "4.x"
+    }
+  },
+  "commands": {
+    "provision": "python3 -m venv .venv && source .venv/bin/activate && pip install jsonschema pytest pyyaml reportlab",
+    "build": "python3 vendor-verifier/cli.py && python3 generate_reports.py && python3 generate_memo.py",
+    "test": "PYTHONPATH=vendor-verifier pytest -q --junitxml=generated/test-report.xml",
+    "clean": "rm -f evidence-verdicts.json data-flow.graphml vendor-risk-memo.pdf contradiction-matrix.csv evidence-index.csv vendor-risk-register.csv monitoring-plan.yaml generated/test-report.xml"
+  },
+  "results": {
+    "public_tests": {
+      "passed": 44,
+      "failed": 0,
+      "report": "generated/test-report.xml"
+    },
+    "runtime_seconds": 0.14,
+    "peak_memory_mb": 128,
+    "output_hashes": {
+      "evidence-verdicts.json": "e47e89667ffd2a51b2c21183e1de9fb6efee5c6432766a5241f55e541187f4d7",
+      "data-flow.graphml": "d4a05e1971d3810b9fe0f3d799d91448dd860d327ceb53d917e028b0ab468e0e"
+    }
+  },
+  "inputs": [
+    "input/vendor-claims.json",
+    "input/vendor-telemetry.json",
+    "input/assurance-and-contract.json",
+    "input/public-fixtures.json",
+    "input/evidence-pack.md"
+  ],
+  "outputs": [
+    "evidence-verdicts.json",
+    "data-flow.graphml",
+    "vendor-risk-memo.pdf",
+    "vendor-risk-register.csv",
+    "contradiction-matrix.csv",
+    "evidence-index.csv",
+    "monitoring-plan.yaml",
+    "decision-log.md",
+    "contract-redlines.md"
+  ],
+  "manual_preconditions": [],
+  "known_limitations": [
+    "RESOLVED before submission: an early file-handling discrepancy affecting five input files was identified and resolved before analysis began, with no effect on any downstream verdict or decision.",
+    "subprocessor.assurance treats a present-but-self-attested assurance value the same as a missing one; this is a documented interpretive judgment, not a schema fact (see evidence-index.csv).",
+    "The undisclosed-subprocessor extension check joins telemetry subprocessors to the DPA-disclosed list on name/id only, the only join key supplied in the pack.",
+    "RESOLVED before submission (fix #1): an earlier revision of decision.py and generate_reports.py had assigned-case entity names (subprocessor names, one deletion job id, one access event id) typed as literal strings in condition/report text rather than derived from the verdicts passed in, which would have failed to update on a replacement export. Fixed by deriving all entity references live via regex extraction from verdict locators/messages; proven with a swap drill (tests/test_decision_no_hardcoded_entities.py) that renames every referenced entity and asserts none of the original names survive regeneration.",
+    "RESOLVED before submission (fix #2, found on review of fix #1): pipeline.py separately hard-coded a literal SOC 2 exception id ('EX-CC7.2') as a no-fallback next(...) lookup; renumbering that id in a replacement export raised an unhandled StopIteration and crashed the entire pipeline rather than just showing stale text -- a strictly worse failure. Fixed by matching on the exception's stable `condition` field instead of its arbitrary `id` label, and by degrading to an `insufficient` verdict (never a crash, never a silent pass) if no matching exception exists. Proven with tests/test_decision_no_hardcoded_entities.py's second test and a standing structural test (tests/test_no_unsafe_lookups.py) that statically scans every vendor-verifier module for the same bare-next()-with-no-default pattern and for literal case-specific values used as comparison targets, so a third instance of this bug class is caught automatically rather than requiring another manual review."
+  ]
+}

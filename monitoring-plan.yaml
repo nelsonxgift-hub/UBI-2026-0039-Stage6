@@ -1,0 +1,93 @@
+monitoring_plan:
+  vendor: PeopleFlow Inc.
+  customer: CloudScale Dynamics
+  decision: conditional_approve
+  review_cadence: quarterly
+  checks:
+  - condition_id: COND-01
+    command: python3 vendor-verifier/cli.py --check UNDISCLOSED_SUBPROCESSOR
+    schedule: quarterly
+    threshold: 'zero occurrences of: UNDISCLOSED_SUBPROCESSOR'
+    owner: PeopleFlow Vendor Manager / CloudScale Chief People Officer
+    evidence_source: UNDISCLOSED_SUBPROCESSOR
+    fail_closed_action: Suspend data transmission to any subprocessor not on the disclosed list.
+    escalation: CloudScale GRC -> CloudScale Chief People Officer -> CEO (contract value exceeds USD 85,000
+      acceptance threshold)
+  - condition_id: COND-02
+    command: python3 vendor-verifier/cli.py --check REGION_CLAIM_CONTRADICTED
+    schedule: quarterly
+    threshold: 'zero occurrences of: REGION_CLAIM_CONTRADICTED'
+    owner: PeopleFlow Compliance Lead
+    evidence_source: REGION_CLAIM_CONTRADICTED
+    fail_closed_action: Treat LOC-02 as false for contractual purposes; apply cross-border transfer terms
+      to all affected data classes until corrected.
+    escalation: CloudScale GRC -> CloudScale Chief People Officer -> CEO (contract value exceeds USD 85,000
+      acceptance threshold)
+  - condition_id: COND-03
+    command: python3 vendor-verifier/cli.py --check ASSURANCE_MISSING
+    schedule: quarterly
+    threshold: 'zero occurrences of: ASSURANCE_MISSING'
+    owner: PeopleFlow Vendor Manager
+    evidence_source: ASSURANCE_MISSING
+    fail_closed_action: Restrict HelpSphere from attachment access until assurance is provided.
+    escalation: CloudScale GRC -> CloudScale Chief People Officer -> CEO (contract value exceeds USD 85,000
+      acceptance threshold)
+  - condition_id: COND-04
+    command: python3 vendor-verifier/cli.py --check PRIVILEGED_MFA_MISSING
+    schedule: quarterly
+    threshold: 'zero occurrences of: PRIVILEGED_MFA_MISSING'
+    owner: PeopleFlow Security Lead
+    evidence_source: PRIVILEGED_MFA_MISSING
+    fail_closed_action: Suspend the affected actor's privileged access pending investigation.
+    escalation: CloudScale GRC -> CloudScale Chief People Officer -> CEO (contract value exceeds USD 85,000
+      acceptance threshold)
+  - condition_id: COND-05
+    command: python3 vendor-verifier/cli.py --check HASH_CHAIN_BROKEN
+    schedule: quarterly
+    threshold: 'zero occurrences of: HASH_CHAIN_BROKEN'
+    owner: PeopleFlow Security Lead
+    evidence_source: HASH_CHAIN_BROKEN
+    fail_closed_action: Treat the access log as unverifiable for the affected period; do not rely on it
+      for LOG-07 evidence until remediated.
+    escalation: CloudScale GRC -> CloudScale Chief People Officer -> CEO (contract value exceeds USD 85,000
+      acceptance threshold)
+  - condition_id: COND-06
+    command: python3 vendor-verifier/cli.py --check SUCCESS_BEFORE_COMPLETION,BACKUP_PURGE_UNPROVEN
+    schedule: quarterly
+    threshold: 'zero occurrences of: SUCCESS_BEFORE_COMPLETION, BACKUP_PURGE_UNPROVEN'
+    owner: PeopleFlow Data Protection Officer
+    evidence_source: SUCCESS_BEFORE_COMPLETION;BACKUP_PURGE_UNPROVEN
+    fail_closed_action: Treat DEL-05 as unproven; escalate to legal if termination deletion is contractually
+      represented as complete before evidence exists.
+    escalation: CloudScale GRC -> CloudScale Chief People Officer -> CEO (contract value exceeds USD 85,000
+      acceptance threshold)
+  - condition_id: COND-07
+    command: python3 vendor-verifier/cli.py --check CUSTOMER_CLOCK_DELAYED
+    schedule: quarterly
+    threshold: 'zero occurrences of: CUSTOMER_CLOCK_DELAYED'
+    owner: CloudScale Legal / PeopleFlow Legal
+    evidence_source: CUSTOMER_CLOCK_DELAYED
+    fail_closed_action: Escalate any suspected incident internally at CloudScale on independent detection,
+      without waiting on PeopleFlow confirmation.
+    escalation: CloudScale GRC -> CloudScale Chief People Officer -> CEO (contract value exceeds USD 85,000
+      acceptance threshold)
+  - condition_id: COND-08
+    command: python3 vendor-verifier/cli.py --check AUDIT_EXCEPTION_CONTRADICTS_CLAIM
+    schedule: quarterly
+    threshold: 'zero occurrences of: AUDIT_EXCEPTION_CONTRADICTS_CLAIM'
+    owner: PeopleFlow Security Lead
+    evidence_source: AUDIT_EXCEPTION_CONTRADICTS_CLAIM
+    fail_closed_action: Do not rely on LOG-07 as met until remediation evidence exists.
+    escalation: CloudScale GRC -> CloudScale Chief People Officer -> CEO (contract value exceeds USD 85,000
+      acceptance threshold)
+  - condition_id: COND-09
+    command: python3 vendor-verifier/cli.py --check EVIDENCE_NOT_SUPPLIED
+    schedule: quarterly
+    threshold: 'zero occurrences of: EVIDENCE_NOT_SUPPLIED'
+    owner: PeopleFlow Vendor Manager
+    evidence_source: EVIDENCE_NOT_SUPPLIED
+    fail_closed_action: Treat IAM-04 as unverified; do not represent it as tested in any downstream audit.
+    escalation: CloudScale GRC -> CloudScale Chief People Officer -> CEO (contract value exceeds USD 85,000
+      acceptance threshold)
+  quarterly_verification_command: 'python3 vendor-verifier/cli.py  # re-run against a fresh telemetry
+    export each quarter; compare evidence-verdicts.json codes against this file''s `threshold` fields'
