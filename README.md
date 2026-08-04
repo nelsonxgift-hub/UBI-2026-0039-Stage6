@@ -4,6 +4,10 @@
 **Evidence marker:** `UBI-A6-A643A704516C`
 **Vendor case:** PeopleFlow Inc. (HR platform) for CloudScale Dynamics
 
+## Repository
+
+https://github.com/nelsonxgift-hub/UBI-2026-0039-Stage6 (private)
+
 ## Environment
 
 - OS: Parrot OS 6.4 MATE Security Edition (VirtualBox VM on Windows host)
